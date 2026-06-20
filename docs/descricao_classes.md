@@ -1,22 +1,21 @@
 Descrição das Classes — Estacionamento Inteligente
 Visão Geral
-O sistema é composto por 5 classes que juntas aplicam todos os pilares de POO:
-encapsulamento, herança, polimorfismo e composição.
+O sistema é composto por 5 classes que juntas aplicam todos os pilares de POO: encapsulamento, herança, polimorfismo e composição.
 ---
 Classe `Sensor`
-Arquivo: `main.ino`  
+Arquivo: `main.ino`
 Responsabilidade: Medir distância via sensor ultrassônico HC-SR04 e determinar se uma vaga está ocupada.
 Atributos (private)
 Atributo	Tipo	Descrição
-`trigPIN`	`int`	Pino TRIG do HC-SR04 (saída — envia pulso)
-`echoPIN`	`int`	Pino ECHO do HC-SR04 (entrada — recebe eco)
-`limiteOcupado`	`float`	Distância em cm abaixo da qual a vaga é considerada ocupada
+`trigPIN`	int	Pino TRIG do HC-SR04 (saída — envia pulso)
+`echoPIN`	int	Pino ECHO do HC-SR04 (entrada — recebe eco)
+`limiteOcupado`	float	Distância em cm abaixo da qual a vaga é considerada ocupada
 Métodos (public)
 Método	Retorno	Descrição
 `Sensor(trig, echo, limite)`	—	Construtor: configura pinos e limiar
-`medir()`	`float`	Dispara pulso e retorna distância em cm
-`estaOcupado()`	`bool`	Retorna `true` se distância < limiteOcupado
-`getLimite()`	`float`	Retorna o limiar configurado
+`medir()`	float	Dispara pulso e retorna distância em cm
+`estaOcupado()`	bool	Retorna `true` se distância < `limiteOcupado`
+`getLimite()`	float	Retorna o limiar configurado
 Como funciona
 ```
 TRIG envia pulso de 10 µs
@@ -27,38 +26,38 @@ TRIG envia pulso de 10 µs
 ```
 ---
 Classe `Vaga` (classe base)
-Arquivo: `main.ino`  
+Arquivo: `main.ino`
 Responsabilidade: Representar uma vaga física com LEDs de sinalização.
 Atributos (private)
 Atributo	Tipo	Descrição
-`id`	`int`	Número identificador da vaga (1 a 4)
-`pinoVerde`	`int`	Pino do LED verde (vaga livre)
-`pinoVermelho`	`int`	Pino do LED vermelho (vaga ocupada)
-`ocupada`	`bool`	Estado atual da vaga
+`id`	int	Número identificador da vaga (1 a 4)
+`pinoVerde`	int	Pino do LED verde (vaga livre)
+`pinoVermelho`	int	Pino do LED vermelho (vaga ocupada)
+`ocupada`	bool	Estado atual da vaga
 Métodos (public)
 Método	Retorno	Descrição
 `Vaga(id, pVerde, pVermelho)`	—	Construtor: configura pinos e estado inicial
-`setOcupada(bool)`	`void`	Atualiza estado e aciona LEDs
-`isOcupada()`	`bool`	Retorna estado atual
-`getId()`	`int`	Retorna o ID da vaga
-`status()`	`String`	Método virtual — retorna string com status da vaga
+`setOcupada(bool)`	void	Atualiza estado e aciona LEDs
+`isOcupada()`	bool	Retorna estado atual
+`getId()`	int	Retorna o ID da vaga
+`status()`	String	Método virtual — retorna string com status da vaga
 Método privado
 Método	Retorno	Descrição
-`atualizarLEDs()`	`void`	Acende LED verde (livre) ou vermelho (ocupado)
+`atualizarLEDs()`	void	Acende LED verde (livre) ou vermelho (ocupado)
 ---
 Classe `Veiculo` (herda `Vaga`)
-Arquivo: `main.ino`  
-Responsabilidade: Estender `Vaga` adicionando o tipo do veículo estacionado.  
+Arquivo: `main.ino`
+Responsabilidade: Estender `Vaga` adicionando o tipo do veículo estacionado.
 Relação: `Veiculo` É-UM `Vaga` (herança)
 Atributo adicional (private)
 Atributo	Tipo	Descrição
-`tipoVeiculo`	`String`	Tipo do veículo: "Carro", "Moto", "Caminhão"
+`tipoVeiculo`	String	Tipo do veículo: "Carro", "Moto", "Caminhão"
 Métodos (public)
 Método	Retorno	Descrição
 `Veiculo(id, pVerde, pVermelho, tipo)`	—	Construtor: chama `Vaga()` e define tipo
-`setTipo(String)`	`void`	Atualiza o tipo do veículo
-`getTipo()`	`String`	Retorna o tipo do veículo
-`status()`	`String`	Sobrescreve `Vaga::status()` — inclui tipo do veículo
+`setTipo(String)`	void	Atualiza o tipo do veículo
+`getTipo()`	String	Retorna o tipo do veículo
+`status()`	String	Sobrescreve `Vaga::status()` — inclui tipo do veículo
 Polimorfismo
 ```cpp
 // Ponteiro para a classe base — chama o método da classe derivada
@@ -68,34 +67,34 @@ Serial.println(v->status());
 ```
 ---
 Classe `Display`
-Arquivo: `main.ino`  
+Arquivo: `main.ino`
 Responsabilidade: Centralizar toda a saída de informações no Serial Monitor.
 Métodos (public)
 Método	Retorno	Descrição
-`exibirCabecalho()`	`void`	Exibe o cabeçalho do painel
-`exibirVaga(Vaga&)`	`void`	Exibe o status de uma vaga (recebe classe base — polimorfismo)
-`exibirResumo(livres, total)`	`void`	Exibe contagem de vagas e alerta de lotação
-`exibirSeparador()`	`void`	Exibe linha separadora
+`exibirCabecalho()`	void	Exibe o cabeçalho do painel
+`exibirVaga(Vaga&)`	void	Exibe o status de uma vaga (recebe classe base — polimorfismo)
+`exibirResumo(livres, total)`	void	Exibe contagem de vagas e alerta de lotação
+`exibirSeparador()`	void	Exibe linha separadora
 ---
 Classe `Estacionamento` (composição)
-Arquivo: `main.ino`  
-Responsabilidade: Orquestrar todo o sistema — agrega vagas, sensores e display.  
+Arquivo: `main.ino`
+Responsabilidade: Orquestrar todo o sistema — agrega vagas, sensores e display.
 Relação: `Estacionamento` TEM vagas (`Veiculo[]`) e TEM display (`Display`) — composição
 Atributos (private)
 Atributo	Tipo	Descrição
-`TOTAL_VAGAS`	`const int`	Número total de vagas (4)
-`vagas[]`	`Veiculo*[4]`	Vetor de ponteiros para as vagas
-`sensores[]`	`Sensor*[4]`	Vetor de ponteiros para os sensores
-`display`	`Display`	Objeto display (composição)
-`vagasLivres`	`int`	Contador de vagas disponíveis
+`TOTAL_VAGAS`	const int	Número total de vagas (4)
+`vagas[]`	Veiculo*[4]	Vetor de ponteiros para as vagas
+`sensores[]`	Sensor*[4]	Vetor de ponteiros para os sensores
+`display`	Display	Objeto display (composição)
+`vagasLivres`	int	Contador de vagas disponíveis
 Métodos (public)
 Método	Retorno	Descrição
 `Estacionamento()`	—	Construtor: instancia todas as vagas e sensores
 `~Estacionamento()`	—	Destrutor: libera memória (`delete`)
-`atualizar()`	`void`	Lê sensores e atualiza estado de cada vaga
-`exibirPainel()`	`void`	Exibe painel completo via Display
-`getVagasLivres()`	`int`	Retorna número de vagas livres
-`getTotalVagas()`	`int`	Retorna total de vagas
+`atualizar()`	void	Lê sensores e atualiza estado de cada vaga
+`exibirPainel()`	void	Exibe painel completo via Display
+`getVagasLivres()`	int	Retorna número de vagas livres
+`getTotalVagas()`	int	Retorna total de vagas
 ---
 Diagrama de Dependências
 ```
@@ -112,3 +111,12 @@ Encapsulamento	Todos os atributos são `private`; acesso via métodos públicos
 Herança	`Veiculo` herda `Vaga` — reutiliza pinos, LEDs e estado
 Polimorfismo	`status()` é `virtual` em `Vaga` e `override` em `Veiculo`
 Composição	`Estacionamento` contém `Veiculo[]`, `Sensor[]` e `Display`
+---
+👥 Equipe
+Membro	Responsabilidade
+Lucas Mariot	Integração: Display, Estacionamento e Wokwi
+Pedro Vitor Ouriques Albino	Código: classes Sensor, Vaga e Veiculo
+Alice da Cruz Justi	Testes, simulação e esquema do circuito
+Cauã de Souza Borges	Documentação: README, UML, descrição de classes
+Jean Carlo Braz da Silveira	Hardware, mapeamento de pinos e validação
+
