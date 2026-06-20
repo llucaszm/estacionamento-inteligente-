@@ -69,11 +69,15 @@ estacionamento-inteligente/
 ```
 ---
 👥 Equipe
-Membro	Responsabilidade
-	Código: classes Sensor, Vaga e Veiculo
-Lucas Mariot	Integração: Display, Estacionamento e Wokwi
-[Membro C]	Documentação: README, UML, descrição de classes
----
+## 👥 Equipe
+
+| Membro                      | Responsabilidade                                  |
+|-----------------------------|---------------------------------------------------|
+| Lucas Mariot                | Integração: Display, Estacionamento e Wokwi       |
+| Pedro Vitor Ouriques Albino | Código: classes Sensor, Vaga e Veiculo            |
+| Alice da Cruz Justi         | Testes, simulação e esquema do circuito           |
+| Cauã de Souza Borges        | Documentação: README, UML, descrição de classes   |
+| Jean Carlo Braz da Silveira | Hardware, mapeamento de pinos e validação         |
 📊 Saída Esperada (Serial Monitor)
 ```
 ========================================
